@@ -9,7 +9,6 @@ import { useContext, useEffect, useState } from "react";
 import Title from "@/components/UI/Title";
 
 const Index = () => {
-
   const router = useRouter();
   const { isLogged } = useContext(UserContext);
   const [token, setToken] = useState();
@@ -49,7 +48,6 @@ const Index = () => {
     method: "POST",
     body: userForm,
     token: null,
-
   });
 
   const freelance = useFetch({
@@ -74,6 +72,7 @@ const Index = () => {
     if (user.data.token) {
       localStorage.setItem("token", user.data.token);
       setToken(user.data.token);
+      router.push("/");
     }
   }, [user.data, router]);
 
@@ -150,175 +149,195 @@ const Index = () => {
 
   return (
     <>
-    <Title title="Inscription" Level="h2" /><form onSubmit={handleSubmit}>
-      <div styles="row">
-        <div styles="col">
-          <Input
-            name="firstName"
-            label="Firstname:"
-            type="text"
-            placeholder="Entrez votre prenom"
-            onChange={handleChange}
-            value={userForm.firstName}
-            required />
-          <Input
-            name="lastName"
-            label="Lastname:"
-            type="text"
-            placeholder="Entrez votre nom"
-            onChange={handleChange}
-            value={userForm.lastName}
-            required />
-          <Input
-            name="email"
-            label="E-mail:"
-            type="email"
-            placeholder="Entrez votre Adresse email"
-            onChange={handleChange}
-            value={userForm.email}
-            required />
-          <Input
-            name="password"
-            label="Password:"
-            type="password"
-            placeholder="Entrez votre password"
-            onChange={handleChange}
-            value={userForm.password}
-            required />
-          <Input
-            name="phone"
-            label="Tel:"
-            type="text"
-            placeholder="Entrez votre numero de telephone"
-            onChange={handleChange}
-            value={userForm.phone}
-            required />
-          <Input
-            name="address.city"
-            label="City:"
-            type="text"
-            placeholder="Entrez votre Ville"
-            onChange={handleChange}
-            value={userForm.address.city}
-            required />
-          <Input
-            name="address.zipCode"
-            label="ZIP Code:"
-            type="text"
-            placeholder="Entrez votre Code Postal"
-            onChange={handleChange}
-            value={userForm.address.zipCode}
-            required />
-          <Input
-            name="address.street"
-            label="Street:"
-            type="text"
-            placeholder="Entrez votre rue"
-            onChange={handleChange}
-            value={userForm.address.street}
-            required />
-        </div>
-        <div styles="col">
-          <div styles="row">
+      <Title title="Inscription" Level="h2" />
+      <form onSubmit={handleSubmit}>
+        <div styles="row">
+          <div styles="col">
             <Input
-              name="userType"
-              data-content="Freelance"
-              type="radio"
+              name="firstName"
+              label="Firstname:"
+              type="text"
+              placeholder="Entrez votre prenom"
               onChange={handleChange}
-              value="FREELANCE"
-              label="FREELANCE"
-              checked={userForm.userType == "FREELANCE"}
-              required />
+              value={userForm.firstName}
+              required
+            />
             <Input
-              name="userType"
-              data-content="Company"
-              type="radio"
+              name="lastName"
+              label="Lastname:"
+              type="text"
+              placeholder="Entrez votre nom"
               onChange={handleChange}
-              value="COMPANY"
-              label="COMPANY"
-              checked={userForm.userType == "COMPANY"}
-              required />
+              value={userForm.lastName}
+              required
+            />
+            <Input
+              name="email"
+              label="E-mail:"
+              type="email"
+              placeholder="Entrez votre Adresse email"
+              onChange={handleChange}
+              value={userForm.email}
+              required
+            />
+            <Input
+              name="password"
+              label="Password:"
+              type="password"
+              placeholder="Entrez votre password"
+              onChange={handleChange}
+              value={userForm.password}
+              required
+            />
+            <Input
+              name="phone"
+              label="Tel:"
+              type="text"
+              placeholder="Entrez votre numero de telephone"
+              onChange={handleChange}
+              value={userForm.phone}
+              required
+            />
+            <Input
+              name="address.city"
+              label="City:"
+              type="text"
+              placeholder="Entrez votre Ville"
+              onChange={handleChange}
+              value={userForm.address.city}
+              required
+            />
+            <Input
+              name="address.zipCode"
+              label="ZIP Code:"
+              type="text"
+              placeholder="Entrez votre Code Postal"
+              onChange={handleChange}
+              value={userForm.address.zipCode}
+              required
+            />
+            <Input
+              name="address.street"
+              label="Street:"
+              type="text"
+              placeholder="Entrez votre rue"
+              onChange={handleChange}
+              value={userForm.address.street}
+              required
+            />
           </div>
-          {userForm.userType == "FREELANCE" && (
-            <>
+          <div styles="col">
+            <div styles="row">
               <Input
-                name="freelance.rate"
-                label="Montant:"
-                type="text"
+                name="userType"
+                data-content="Freelance"
+                type="radio"
                 onChange={handleChange}
-                value={formFreelance.rate}
-                required />
+                value="FREELANCE"
+                label="FREELANCE"
+                checked={userForm.userType == "FREELANCE"}
+                required
+              />
               <Input
-                name="freelance.yearOfExperience"
-                label="Experiences (ans):"
-                type="text"
+                name="userType"
+                data-content="Company"
+                type="radio"
                 onChange={handleChange}
-                value={formFreelance.yearOfExperience}
-                required />
-            </>
-          )}
+                value="COMPANY"
+                label="COMPANY"
+                checked={userForm.userType == "COMPANY"}
+                required
+              />
+            </div>
+            {userForm.userType == "FREELANCE" && (
+              <>
+                <Input
+                  name="freelance.rate"
+                  label="Montant:"
+                  type="text"
+                  onChange={handleChange}
+                  value={formFreelance.rate}
+                  required
+                />
+                <Input
+                  name="freelance.yearOfExperience"
+                  label="Experiences (ans):"
+                  type="text"
+                  onChange={handleChange}
+                  value={formFreelance.yearOfExperience}
+                  required
+                />
+              </>
+            )}
 
-          {userForm.userType == "COMPANY" && (
-            <>
-              <Input
-                name="company.name"
-                label="Name:"
-                type="text"
-                onChange={handleChange}
-                value={formCompany.name}
-                required />
-              <Input
-                name="company.status"
-                label="Status: "
-                type="text"
-                placeholder="SAS, SASU, SARL, EURL, SA"
-                onChange={handleChange}
-                value={formCompany.status}
-                required />
-              <Input
-                name="company.siret"
-                label="SIRET:"
-                type="text"
-                onChange={handleChange}
-                value={formCompany.siret}
-                required />
-              <Input
-                name="company.address.city"
-                label="City:"
-                type="text"
-                placeholder="New York"
-                onChange={handleChange}
-                value={formCompany.address.city}
-                required />
-              <Input
-                name="company.address.zipCode"
-                label="ZIP Code:"
-                type="text"
-                placeholder="Entrez le Code Postal (Company)"
-                onChange={handleChange}
-                value={formCompany.address.zipCode}
-                required />
-              <Input
-                name="company.address.street"
-                label="Street:"
-                type="text"
-                placeholder="Entrez la rue (Company)"
-                onChange={handleChange}
-                value={formCompany.address.street}
-                required />
-            </>
-          )}
+            {userForm.userType == "COMPANY" && (
+              <>
+                <Input
+                  name="company.name"
+                  label="Name:"
+                  type="text"
+                  onChange={handleChange}
+                  value={formCompany.name}
+                  required
+                />
+                <Input
+                  name="company.status"
+                  label="Status: "
+                  type="text"
+                  placeholder="SAS, SASU, SARL, EURL, SA"
+                  onChange={handleChange}
+                  value={formCompany.status}
+                  required
+                />
+                <Input
+                  name="company.siret"
+                  label="SIRET:"
+                  type="text"
+                  onChange={handleChange}
+                  value={formCompany.siret}
+                  required
+                />
+                <Input
+                  name="company.address.city"
+                  label="City:"
+                  type="text"
+                  placeholder="New York"
+                  onChange={handleChange}
+                  value={formCompany.address.city}
+                  required
+                />
+                <Input
+                  name="company.address.zipCode"
+                  label="ZIP Code:"
+                  type="text"
+                  placeholder="Entrez le Code Postal (Company)"
+                  onChange={handleChange}
+                  value={formCompany.address.zipCode}
+                  required
+                />
+                <Input
+                  name="company.address.street"
+                  label="Street:"
+                  type="text"
+                  placeholder="Entrez la rue (Company)"
+                  onChange={handleChange}
+                  value={formCompany.address.street}
+                  required
+                />
+              </>
+            )}
+          </div>
         </div>
-      </div>
 
-      <Button type="submit" title="S'inscrire" className="btn__secondary">
-        {user.loading || freelance.loading || company.loading ? (
-          <Loading />
-        ) : (
-          "Create account"
-        )}
-      </Button>
-    </form></>
+        <Button type="submit" title="S'inscrire" className="btn__secondary">
+          {user.loading || freelance.loading || company.loading ? (
+            <Loading />
+          ) : (
+            "Create account"
+          )}
+        </Button>
+      </form>
+    </>
   );
 };
 

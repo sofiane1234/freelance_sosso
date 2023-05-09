@@ -8,13 +8,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <UserContextProvider>
-        {router.asPath.startsWith("/auth") ? (
+        <MainLayout>
           <Component {...pageProps} />
-        ) : (
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        )}
+        </MainLayout>
       </UserContextProvider>
     </>
   );

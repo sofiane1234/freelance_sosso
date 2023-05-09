@@ -1,39 +1,94 @@
-import Button from "@/components/UI/Button";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "@/context/userContext";
+import { useRouter } from "next/router";
+import useFetch from "@/hooks/useFetch";
 import Input from "@/components/UI/Input";
+import Button from "@/components/UI/Button/";
 import Title from "@/components/UI/Title";
-import React from "react";
-import { useState } from "react";
+import Loading from "@/components/UI/Loading";
 
 const Index = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const router = useRouter();
+
+  const { login } = useContext(UserContext);
+
+  const [userForm, setUserForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [token, setToken] = useState();
+
+  const { fetchData, data, error, loading } = useFetch({
+    url: "/auth/login",
+    method: "POST",
+    body: userForm,
+    token: null,
+  });
+  const {
+    data: user,
+    error: userError,
+    loading: userLoading,
+    fetchData: fetchDataUser,
+  } = useFetch({ url: "/user", method: "GET", body: null, token: token });
+
+  useEffect(() => {
+    if (data.token) {
+      setToken(data.token);
+      localStorage.setItem("token", data.token);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    fetchDataUser();
+    if (user.success) {
+      login({
+        firstName: user.user.firstName,
+        lastName: user.user.lastName,
+        email: user.user.email,
+      });
+      router.push("/");
+    }
+  }, [token, user]);
+
+  const handleChange = (e) => {
+    setUserForm({
+      ...userForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submitLogin = (e) => {
+    e.preventDefault();
+    fetchData();
+  };
 
   return (
-    <div>
-      <Title title="Connexion" Level="h2" />
-      <form>
+    <>
+      <Loading isLoad={loading} />
+      <Title title="Login" Level="h1" />
+      <form onSubmit={(e) => submitLogin(e)}>
         <Input
-          name="email"
+          label="Email"
           type="email"
-          label="Adresse Email"
-          placeholder="Veuillez entrer votre adresse email"
+          name="email"
+          placeholder="Saisissez votre email"
           required={true}
-          value={email}
-          onChange={setEmail.email}
+          onChange={(e) => handleChange(e)}
+          value={userForm.email}
         />
-
         <Input
-          name="password"
+          label="Password"
           type="password"
-          label="Mot de Passe"
-          placeholder="Veuillez entrer votre mot de passe"
+          name="password"
+          placeholder="Saisissez votre mot de passe"
           required={true}
-          value={password}
-          onChange={setPassword.password}
+          onChange={(e) => handleChange(e)}
+          value={userForm.password}
         />
-        <Button type="submit" title="Se Connecter" className="btn__secondary" />
+        <Button type="submit" title="Se connecter" className="btn__secondary" />
       </form>
-    </div>
+    </>
   );
 };
 
