@@ -9,7 +9,7 @@ const useFetch = ({ url, method, body, token }) => {
         setLoading(true);
         
         try {
-            const response = await fetch(`${process.env.API_LIEN}${url}`, {
+            const response = await fetch(`${process.env.API_LIEN}/${url}`, {
                 headers: {
                     "Content-Type": "Application/json",
                     ...token && {

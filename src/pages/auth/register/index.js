@@ -157,7 +157,7 @@ const Index = () => {
             name="firstName"
             label="Firstname:"
             type="text"
-            placeholder="Bob"
+            placeholder="Entrez votre prenom"
             onChange={handleChange}
             value={userForm.firstName}
             required />
@@ -165,7 +165,7 @@ const Index = () => {
             name="lastName"
             label="Lastname:"
             type="text"
-            placeholder="Martin"
+            placeholder="Entrez votre nom"
             onChange={handleChange}
             value={userForm.lastName}
             required />
@@ -173,7 +173,7 @@ const Index = () => {
             name="email"
             label="E-mail:"
             type="email"
-            placeholder="your@email.com"
+            placeholder="Entrez votre Adresse email"
             onChange={handleChange}
             value={userForm.email}
             required />
@@ -181,15 +181,15 @@ const Index = () => {
             name="password"
             label="Password:"
             type="password"
-            placeholder="Your password"
+            placeholder="Entrez votre password"
             onChange={handleChange}
             value={userForm.password}
             required />
           <Input
             name="phone"
-            label="Phone:"
+            label="Tel:"
             type="text"
-            placeholder=""
+            placeholder="Entrez votre numero de telephone"
             onChange={handleChange}
             value={userForm.phone}
             required />
@@ -205,7 +205,7 @@ const Index = () => {
             name="address.zipCode"
             label="ZIP Code:"
             type="text"
-            placeholder="56987"
+            placeholder="Entrez votre Code Postal"
             onChange={handleChange}
             value={userForm.address.zipCode}
             required />
@@ -213,7 +213,7 @@ const Index = () => {
             name="address.street"
             label="Street:"
             type="text"
-            placeholder="9, av. George Carlos"
+            placeholder="Entrez votre rue"
             onChange={handleChange}
             value={userForm.address.street}
             required />
@@ -243,14 +243,14 @@ const Index = () => {
             <>
               <Input
                 name="freelance.rate"
-                label="Rate:"
+                label="Montant:"
                 type="text"
                 onChange={handleChange}
                 value={formFreelance.rate}
                 required />
               <Input
                 name="freelance.yearOfExperience"
-                label="Year of experience:"
+                label="Experiences (ans):"
                 type="text"
                 onChange={handleChange}
                 value={formFreelance.yearOfExperience}
@@ -294,7 +294,7 @@ const Index = () => {
                 name="company.address.zipCode"
                 label="ZIP Code:"
                 type="text"
-                placeholder="56987"
+                placeholder="Entrez le Code Postal (Company)"
                 onChange={handleChange}
                 value={formCompany.address.zipCode}
                 required />
@@ -302,7 +302,7 @@ const Index = () => {
                 name="company.address.street"
                 label="Street:"
                 type="text"
-                placeholder="9, av. George Carlos"
+                placeholder="Entrez la rue (Company)"
                 onChange={handleChange}
                 value={formCompany.address.street}
                 required />
