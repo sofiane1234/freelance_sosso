@@ -10,8 +10,6 @@ import Title from "@/components/UI/Title";
 
 const Index = () => {
   const router = useRouter();
-  const { isLogged } = useContext(UserContext);
-  const [token, setToken] = useState();
 
   const [userForm, setUserForm] = useState({
     firstName: "",
@@ -43,109 +41,65 @@ const Index = () => {
     },
   });
 
-  const user = useFetch({
+  const { fetchData, data, error, loading } = useFetch({
     url: "/auth/register",
     method: "POST",
     body: userForm,
     token: null,
   });
 
-  const freelance = useFetch({
-    url: "/auth/freelance",
-    method: "POST",
-    body: formFreelance,
-    token: token,
-  });
-
-  const company = useFetch({
-    url: "/auth/company",
-    method: "POST",
-    body: formCompany,
-    token: token,
-  });
-
-  useEffect(() => {
-    if (isLogged) router.push("/");
-  }, [isLogged, router]);
-
-  useEffect(() => {
-    if (user.data.token) {
-      localStorage.setItem("token", user.data.token);
-      setToken(user.data.token);
-      router.push("/");
-    }
-  }, [user.data, router]);
-
-  useEffect(() => {
-    if (userForm.userType == "FREELANCE" && token != null) {
-      freelance.fetchData();
-    }
-    if (userForm.userType == "COMPANY" && token != null) {
-      company.fetchData();
-    }
-  }, [token]);
-
-  useEffect(() => {
-    if (user.error) {
-      console.log(`Error: ${user.error.message}`);
-    }
-
-    if (freelance.error) {
-      console.log(`Error: ${freelance.error.message}`);
-    }
-
-    if (company.error) {
-      console.log(`Error: ${company.error.message}`);
-    }
-  }, [user, freelance, company]);
-
-  const handleChange = (event) => {
-    if (event.target.name.split(".")[0] == "address") {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "userType") {
+      setUserForm({
+        ...userForm,
+        [name]: value === "FREELANCE" ? "FREELANCE" : "COMPANY",
+      });
+    } else if (name.startsWith("address.")) {
       setUserForm({
         ...userForm,
         address: {
           ...userForm.address,
-          [event.target.name.split(".")[1]]: event.target.value,
+          [name.split(".")[1]]: value,
         },
       });
     } else {
       setUserForm({
         ...userForm,
-        [event.target.name]: event.target.value,
+        [name]: value,
       });
     }
-
-    if (event.target.name.split(".")[0] == "freelance") {
-      setFormFreelance({
-        ...formFreelance,
-        [event.target.name.split(".")[1]]: event.target.value,
-      });
-    }
-
-    if (event.target.name.split(".")[0] == "company") {
-      if (event.target.name.split(".")[1] == "address") {
-        setFormCompany({
-          ...formCompany,
-          address: {
-            ...formCompany.address,
-            [event.target.name.split(".")[2]]: event.target.value,
-          },
-        });
-      } else {
-        setFormCompany({
-          ...formCompany,
-          [event.target.name.split(".")[1]]: event.target.value,
-        });
-      }
-
-      console.log(formCompany);
-    }
+    console.log("user : ", userForm);
   };
+
+  useEffect(() => {
+    console.log("data : ", data);
+    if (data && data.success) {
+      if (userForm.userType === "FREELANCE") {
+        router.push("/auth/register/freelance");
+      } else if (userForm.userType === "COMPANY") {
+        router.push("/auth/register/company");
+      }
+      localStorage.setItem("token", data.token);
+    }
+  }, [data]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    user.fetchData();
+
+    const response = fetchData();
+    if (data && data.success) {
+      setClickError(false);
+      console.log("data : ", data);
+      console.log(data.token);
+    } else {
+      console.log(error)
+    }
   };
+  if (loading) return <Loading />;
+  if (error) {
+    error.message = error.message;
+  }
 
   return (
     <>
@@ -319,7 +273,7 @@ const Index = () => {
                   name="company.address.street"
                   label="Street:"
                   type="text"
-                  placeholder="Entrez la rue (Company)"
+                  placeholder="9, av. George Carlos"
                   onChange={handleChange}
                   value={formCompany.address.street}
                   required
@@ -329,13 +283,7 @@ const Index = () => {
           </div>
         </div>
 
-        <Button type="submit" title="S'inscrire" className="btn__secondary">
-          {user.loading || freelance.loading || company.loading ? (
-            <Loading />
-          ) : (
-            "Create account"
-          )}
-        </Button>
+        <Button type="submit" title="S'inscrire" className="btn__secondary" />
       </form>
     </>
   );
